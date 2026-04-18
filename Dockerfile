@@ -1,4 +1,3 @@
-
 FROM alpine:3.20
 
 ARG SB_VER=1.13.8
@@ -11,10 +10,9 @@ RUN apk add --no-cache nginx wget tar ca-certificates && \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY config.json /etc/sing-box/config.json
-COPY entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh && mkdir -p /run/nginx
+RUN mkdir -p /run/nginx
 
 EXPOSE 80
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/sh", "-c", "sing-box run -c /etc/sing-box/config.json & exec nginx -g 'daemon off;'"]
